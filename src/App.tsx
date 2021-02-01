@@ -14,11 +14,15 @@ type TodoList = {
 type AddTodoProps = {
   content: string
   count: number
-  onChange: (key_value: HashStringString) => void
+  onChange: (key_value: KeyValue) => void
   onAdd: (todoElement: TodoList) => void
 }
 
-type HashStringString = {
+type TodoElementProps = {
+  todoList: TodoList[]
+}
+
+type KeyValue = {
   [key: string]: string
 }
 
@@ -29,7 +33,7 @@ class TodoApp extends React.Component<{}, TodoAppState> {
     count: 0,
   }
 
-  handleChange(key_value: HashStringString) {
+  handleChange(key_value: KeyValue) {
     this.setState({
       value: key_value['value'],
     })
@@ -44,11 +48,6 @@ class TodoApp extends React.Component<{}, TodoAppState> {
   }
 
   render() {
-    const todoListNode = this.state.todoList.map(element => {
-      return (
-        <li key={element.id}>{element.content}</li>
-      )
-    })
     return (
       <div>
         <h1>Todo App</h1>
@@ -58,9 +57,9 @@ class TodoApp extends React.Component<{}, TodoAppState> {
           onChange={key_value => this.handleChange(key_value)}
           onAdd={todoElement => this.handleAdd(todoElement)}
         />
-        <ul>
-          {todoListNode}
-        </ul>
+        <TodoElement
+          todoList={this.state.todoList}
+        />
       </div>
     )
   }
@@ -92,6 +91,23 @@ class AddTodo extends React.Component<AddTodoProps,{}> {
           onChange={e => this.onChange(e)}
         />
         <button onClick={() => this.onAdd()}>追加</button>
+      </div>
+    )
+  }
+}
+
+class TodoElement extends React.Component<TodoElementProps, {}> {
+  render() {
+    const todoListNode = this.props.todoList.map(element => {
+      return (
+        <li key={element.id}>{element.content}</li>
+      )
+    })
+    return (
+      <div>
+        <ul>
+          {todoListNode}
+        </ul>
       </div>
     )
   }
