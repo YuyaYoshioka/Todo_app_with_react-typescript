@@ -19,7 +19,7 @@ type AddTodoProps = {
 }
 
 type TodoElementProps = {
-  todoList: TodoList[]
+  todoList: TodoList
 }
 
 type KeyValue = {
@@ -48,6 +48,13 @@ class TodoApp extends React.Component<{}, TodoAppState> {
   }
 
   render() {
+    const todoListNode = this.state.todoList.map(element => {
+      return (
+        <TodoElement
+          todoList={element}
+        />
+      )
+    })
     return (
       <div>
         <h1>Todo App</h1>
@@ -57,9 +64,9 @@ class TodoApp extends React.Component<{}, TodoAppState> {
           onChange={key_value => this.handleChange(key_value)}
           onAdd={todoElement => this.handleAdd(todoElement)}
         />
-        <TodoElement
-          todoList={this.state.todoList}
-        />
+        <ul>
+          {todoListNode}
+        </ul>
       </div>
     )
   }
@@ -98,17 +105,8 @@ class AddTodo extends React.Component<AddTodoProps,{}> {
 
 class TodoElement extends React.Component<TodoElementProps, {}> {
   render() {
-    const todoListNode = this.props.todoList.map(element => {
-      return (
-        <li key={element.id}>{element.content}</li>
-      )
-    })
     return (
-      <div>
-        <ul>
-          {todoListNode}
-        </ul>
-      </div>
+      <li key={this.props.todoList.id}>{this.props.todoList.content}</li>
     )
   }
 }
