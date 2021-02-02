@@ -20,6 +20,7 @@ type AddTodoProps = {
 
 type TodoElementProps = {
   todoList: TodoList
+  onDelete: (id: number) => void
 }
 
 type KeyValue = {
@@ -47,14 +48,30 @@ class TodoApp extends React.Component<{}, TodoAppState> {
     })
   }
 
+  handleDelete(id: number) {
+    let index: number = 0
+    let todoList: TodoList[] = this.state.todoList.concat()
+    for (const element of todoList) {
+      if (element.id===id) {
+        break
+      }
+      index++
+    }
+    todoList.splice(index, 1)
+    this.setState({todoList: todoList})
+  } 
+
   render() {
     const todoListNode = this.state.todoList.map(element => {
       return (
         <TodoElement
+          key={element.id}
           todoList={element}
+          onDelete={id => this.handleDelete(id)}
         />
       )
     })
+
     return (
       <div>
         <h1>Todo App</h1>
@@ -104,9 +121,16 @@ class AddTodo extends React.Component<AddTodoProps,{}> {
 }
 
 class TodoElement extends React.Component<TodoElementProps, {}> {
+  onDelete() {
+    this.props.onDelete(this.props.todoList.id)
+  }
+
   render() {
     return (
-      <li key={this.props.todoList.id}>{this.props.todoList.content}</li>
+      <li>
+        <span>{this.props.todoList.content}</span>
+        <button onClick={() => this.onDelete()}>削除</button>
+      </li>
     )
   }
 }
