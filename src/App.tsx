@@ -146,85 +146,79 @@ class TodoApp extends React.Component<{}, TodoAppState> {
   }
 }
 
-class AddTodo extends React.Component<AddTodoProps,{}> {
-  onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.props.onChange({
+const AddTodo: React.FC<AddTodoProps> = props => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChange({
       value: e.target.value
     })
   }
 
-  onAdd() {
-    const id: number = this.props.count
-    const content: string = this.props.content
+  const onAdd = () => {
+    const id: number = props.count
+    const content: string = props.content
     const todoElement: TodoList = {
       id: id,
       content: content
     }
-    this.props.onAdd(todoElement)
+    props.onAdd(todoElement)
   }
 
-  render() {
-    return (
-      <div>
-        <input
-          type='text'
-          value={this.props.content}
-          onChange={e => this.onChange(e)}
-        />
-        <button onClick={() => this.onAdd()}>追加</button>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <input
+        type='text'
+        value={props.content}
+        onChange={e => onChange(e)}
+      />
+      <button onClick={() => onAdd()}>追加</button>
+    </div>
+  )
 }
 
-class UpdateTodo extends React.Component<UpdateTodoProps, {}> {
-  onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.props.onChange({
+const UpdateTodo: React.FC<UpdateTodoProps> = props => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChange({
       value: e.target.value
     })
   }
 
-  onCancel() {
-    this.props.onCancel()
+  const onCancel = () => {
+    props.onCancel()
   }
 
-  onUpdate() {
-    this.props.onUpdate()
+  const onUpdate = () => {
+    props.onUpdate()
   }
 
-  render() {
-    return (
-      <div>
-        <input
-          type='text'
-          value={this.props.content}
-          onChange={e => this.onChange(e)}
-        />
-        <button onClick={() => this.onUpdate()}>編集</button>
-        <button onClick={() => this.onCancel()}>キャンセル</button>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <input
+        type='text'
+        value={props.content}
+        onChange={e => onChange(e)}
+      />
+      <button onClick={() => onUpdate()}>編集</button>
+      <button onClick={() => onCancel()}>キャンセル</button>
+    </div>
+  )
 }
 
-class TodoElement extends React.Component<TodoElementProps, {}> {
-  onDelete() {
-    this.props.onDelete(this.props.todoList.id)
+const TodoElement: React.FC<TodoElementProps> = props => {
+  const onDelete = () => {
+    props.onDelete(props.todoList.id)
   }
 
-  onEdit() {
-    this.props.onEdit(this.props.todoList)
+  const onEdit = () => {
+    props.onEdit(props.todoList)
   }
 
-  render() {
-    return (
-      <li>
-        <span>{this.props.todoList.content}</span>
-        <button onClick={() => this.onDelete()}>削除</button>
-        <button onClick={() => this.onEdit()}>編集</button>
-      </li>
-    )
-  }
+  return (
+    <li>
+      <span>{props.todoList.content}</span>
+      <button onClick={() => onDelete()}>削除</button>
+      <button onClick={() => onEdit()}>編集</button>
+    </li>
+  )
 }
 
 const App: React.FC = () => {
