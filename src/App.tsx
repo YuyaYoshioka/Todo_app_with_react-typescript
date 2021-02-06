@@ -1,12 +1,4 @@
-import React from 'react';
-
-type TodoAppState = {
-  value: string
-  todoList: TodoList[]
-  count: number
-  editId: number
-  flag: number
-}
+import React, { useState } from 'react';
 
 type TodoList = {
   id: number
@@ -37,113 +29,100 @@ type KeyValue = {
   [key: string]: string
 }
 
-class TodoApp extends React.Component<{}, TodoAppState> {
-  state: TodoAppState = {
-    value: '',
-    todoList: [],
-    count: 0,
-    editId: -1,
-    flag: 0,
+const TodoApp = () => {
+  const [value, setValue] = useState('');
+  const [todoList, setTodoList] = useState([] as TodoList[]);
+  const [count, setCount] = useState(0);
+  const [editId, setEditId] = useState(-1);
+  const [flag, setFlag] = useState(0);
+
+  const handleChange = (key_value: KeyValue) => {
+    setValue(key_value['value']);
   }
 
-  handleChange(key_value: KeyValue) {
-    this.setState({
-      value: key_value['value'],
-    })
+  const handleAdd = (todoElement: TodoList) => {
+    setTodoList(todoList.concat(todoElement));
+    setValue('');
+    setCount(count + 1);
   }
 
-  handleAdd(todoElement: TodoList) {
-    this.setState({
-      todoList: this.state.todoList.concat(todoElement),
-      value: '',
-      count: this.state.count + 1,
-    })
-  }
-
-  handleDelete(id: number) {
+  const handleDelete = (id: number) => {
     let index: number = 0
-    let todoList: TodoList[] = this.state.todoList.concat()
-    for (const element of todoList) {
+    let newTodoList: TodoList[] = todoList.concat()
+    for (const element of newTodoList) {
       if (element.id===id) {
         break
       }
       index++
     }
     todoList.splice(index, 1)
-    this.setState({todoList: todoList})
+    setTodoList(todoList)
   }
 
-  handleEdit(todoList: TodoList) {
-    this.setState({
-      editId: todoList.id,
-      value: todoList.content,
-      flag: 1,
-    })
+  const handleEdit = (todoList: TodoList) => {
+    setEditId(todoList.id);
+    setValue(todoList.content);
+    setFlag(1);
   }
 
-  handleCancel() {
-    this.setState({
-      value: '',
-      flag: 0,
-      editId: -1,
-    })
+  const handleCancel = () => {
+    setValue('');
+    setFlag(0);
+    setEditId(-1);
   }
 
-  handleUpdate() {
-    let todoList: TodoList[] = this.state.todoList
+  const handleUpdate = () => {
+    let newTodoList: TodoList[] = todoList
     let index: number = 0
-    for (const element of todoList) {
-      if (element.id===this.state.editId) {
-        todoList[index].content = this.state.value
+    for (const element of newTodoList) {
+      if (element.id===editId) {
+        newTodoList[index].content = value
       }
       index++
     }
-    this.setState({
-      todoList: todoList,
-      flag: 0,
-      editId: -1,
-      value: '',
-    })
+    setTodoList(todoList);
+    setFlag(flag);
+    setEditId(editId);
+    setValue(value);
   }
-  render() {
-    const todoListNode = this.state.todoList.map(element => {
-      return (
-        <TodoElement
-          key={element.id}
-          todoList={element}
-          onDelete={id => this.handleDelete(id)}
-          onEdit={todoList => this.handleEdit(todoList)}
-        />
-      )
-    })
 
-    let changeTodo: any
-    if (this.state.flag===0) {
-      changeTodo = <AddTodo
-                    content={this.state.value}
-                    count={this.state.count}
-                    onChange={key_value => this.handleChange(key_value)}
-                    onAdd={todoElement => this.handleAdd(todoElement)}
-                   />
-    } else {
-      changeTodo = <UpdateTodo
-                    onChange={key_value => this.handleChange(key_value)}
-                    onUpdate={() => this.handleUpdate()}
-                    onCancel={() => this.handleCancel()}
-                    content={this.state.value}
-                   />
-    }
-
+  const todoListNode = todoList.map(element => {
     return (
-      <div>
-        <h1>Todo App</h1>
-        {changeTodo}
-        <ul>
-          {todoListNode}
-        </ul>
-      </div>
+      <TodoElement
+        key={element.id}
+        todoList={element}
+        onDelete={id => handleDelete(id)}
+        onEdit={todoList => handleEdit(todoList)}
+      />
     )
+  })
+
+  let changeTodo: any
+  if (flag===0) {
+    changeTodo = <AddTodo
+                  content={value}
+                  count={count}
+                  onChange={key_value => handleChange(key_value)}
+                  onAdd={todoElement => handleAdd(todoElement)}
+                  />
+  } else {
+    changeTodo = <UpdateTodo
+                  onChange={key_value => handleChange(key_value)}
+                  onUpdate={() => handleUpdate()}
+                  onCancel={() => handleCancel()}
+                  content={value}
+                  />
   }
+
+  return (
+    <div>
+      <h1>Todo App</h1>
+      {changeTodo}
+      <ul>
+        {todoListNode}
+      </ul>
+    </div>
+  )
 }
 
 const AddTodo = (props: AddTodoProps) => {
