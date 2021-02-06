@@ -55,8 +55,8 @@ const TodoApp = () => {
       }
       index++
     }
-    todoList.splice(index, 1)
-    setTodoList(todoList)
+    newTodoList.splice(index, 1)
+    setTodoList(newTodoList)
   }
 
   const handleEdit = (todoList: TodoList) => {
@@ -80,10 +80,10 @@ const TodoApp = () => {
       }
       index++
     }
-    setTodoList(todoList);
-    setFlag(flag);
+    setTodoList(newTodoList);
+    setFlag(0);
     setEditId(editId);
-    setValue(value);
+    setValue('');
   }
 
   const todoListNode = todoList.map(element => {
