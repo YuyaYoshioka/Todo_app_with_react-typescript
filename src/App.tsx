@@ -146,7 +146,7 @@ class TodoApp extends React.Component<{}, TodoAppState> {
   }
 }
 
-const AddTodo: React.FC<AddTodoProps> = props => {
+const AddTodo = (props: AddTodoProps) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.onChange({
       value: e.target.value
@@ -175,7 +175,7 @@ const AddTodo: React.FC<AddTodoProps> = props => {
   )
 }
 
-const UpdateTodo: React.FC<UpdateTodoProps> = props => {
+const UpdateTodo = (props: UpdateTodoProps) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.onChange({
       value: e.target.value
@@ -203,7 +203,7 @@ const UpdateTodo: React.FC<UpdateTodoProps> = props => {
   )
 }
 
-const TodoElement: React.FC<TodoElementProps> = props => {
+const TodoElement = (props: TodoElementProps) => {
   const onDelete = () => {
     props.onDelete(props.todoList.id)
   }
