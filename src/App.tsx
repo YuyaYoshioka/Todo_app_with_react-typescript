@@ -200,7 +200,7 @@ const TodoElement = (props: TodoElementProps) => {
   )
 }
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <div className="main">
       <TodoApp />
